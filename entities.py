@@ -26,13 +26,19 @@ class Player(Entity):
 
     def move(self, move_speed):
         self.position.xy += self.direction.xy * move_speed
+        # Asegurar que el jugador no se salga de la zona designada
         if self.position.x >= 248:
             self.position.x = 248
         elif self.position.x <= 210:
             self.position.x = 210
+        if self.position.y <= 0:
+            self.position.y = 0
+        elif self.position.y >= 226:
+            self.position.y = 226
+
+        # Actualizar el rect a la posición
         self.rect.x = self.position.x
         self.rect.y = self.position.y
-        self.name = "test"
 
     def shoot(self, delta):
         if self.delta < 0:

@@ -13,7 +13,10 @@ seperator = pg.Rect(210, 0, 5, SCREEN_HEIGHT)
 
 pg.init()
 
+# RESIZABLE para poder cambiar su tamaño
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
+# fake_screen es donde se debería hacer todos los blits y draws
+# Luego se le hace blit al screen para que todo este proporcional si cambia el tamaño de la pantalla
 fake_screen = screen.copy()
 
 running = True
@@ -21,7 +24,7 @@ running = True
 # Initialize players
 hero = entities.Player("player", 230, SCREEN_HEIGHT/3)
 zero = entities.Player("player2", 230, SCREEN_HEIGHT * 2 / 3)
-
+# agregar player a player.Group y all_sprites.Group
 all_sprites = pg.sprite.Group()
 all_sprites.add(hero)
 all_sprites.add(zero)
@@ -30,6 +33,7 @@ players.add(hero)
 players.add(zero)
 
 clock = pg.time.Clock()
+# Iniciar generador de zombies.
 zombie_generator = ZombieGenerator([], 0.3, 50)
 zombies = []
 
@@ -62,7 +66,7 @@ while running:
         hero.direction.y += 1
     if keys[pg.K_RETURN]:
         hero.shoot(dt)
-
+    # Input Zero
     if keys[pg.K_a]:
         zero.direction.x += -1
     if keys[pg.K_d]:
@@ -100,20 +104,12 @@ while running:
             bullet.direction.x = -1
             bullet.move(bullet.SPEED * delta_speed)
 
-    # Y-Sort (vamos a tener que crear una version general para entidades)
-    # if zero.position.y < hero.position.y:
-    #     for player in reversed(players):
-    #         player.draw_entity(fake_screen)
-    # else:
-    #     for player in players:
-    #         player.draw_entity(fake_screen)
-
     pg.draw.rect(fake_screen, (255, 255, 255), seperator)
     all_sprites.draw(fake_screen)
     for player in players:
         player.bullets.draw(fake_screen)
-
+    # Transformar fake_screen al tamaño de screen, y hacerle blit.
     screen.blit(pg.transform.scale(fake_screen, screen.get_rect().size), (0, 0))
 
-    # Update
+    # Actualizar la pantalla
     pg.display.flip()
