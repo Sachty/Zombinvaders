@@ -8,7 +8,7 @@ SCREEN_WIDTH = 256
 # VARIABLES
 collided = False
 
-# Arena
+# Barra blanca que separa
 seperator = pg.Rect(210, 0, 5, SCREEN_HEIGHT)
 
 pg.init()
@@ -22,10 +22,12 @@ running = True
 hero = entities.Player("player", 230, SCREEN_HEIGHT/3)
 zero = entities.Player("player2", 230, SCREEN_HEIGHT * 2 / 3)
 
-all_sprites = pg.sprite.LayeredUpdates()
+all_sprites = pg.sprite.Group()
 all_sprites.add(hero)
 all_sprites.add(zero)
-players = [hero, zero]
+players = pg.sprite.Group()
+players.add(hero)
+players.add(zero)
 
 clock = pg.time.Clock()
 zombie_generator = ZombieGenerator([], 0.3, 50)
@@ -97,7 +99,6 @@ while running:
         for bullet in player.bullets:
             bullet.direction.x = -1
             bullet.move(bullet.SPEED * delta_speed)
-
 
     # Y-Sort (vamos a tener que crear una version general para entidades)
     # if zero.position.y < hero.position.y:
