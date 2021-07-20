@@ -94,11 +94,11 @@ while running:
         zombie.direction.xy = (0, 0)
         zombie.direction.x += 1
         zombie.move(zombie.SPEED * delta_speed)
-        for player in players:
+        for player in players:  # Colisión balas con zombies
             gets_hit = pg.sprite.spritecollide(zombie, player.bullets, True)
             if gets_hit:
                 zombie.kill()
-
+    # Mover las balas
     for player in players:
         for bullet in player.bullets:
             bullet.direction.x = -1

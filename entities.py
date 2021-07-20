@@ -1,6 +1,6 @@
 import pygame as pg
 
-
+# Cada entidad recibe un sprite, una posición x, y una posición y
 class Entity(pg.sprite.Sprite):
     def __init__(self, spr, x, y):
         super().__init__()
