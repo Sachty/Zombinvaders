@@ -4,14 +4,14 @@ from zombie_generator import ZombieGenerator
 from entities import sounds
 
 # CONSTANTS
-SCREEN_HEIGHT = 240
-SCREEN_WIDTH = 256
+SCREEN_HEIGHT = 400
+SCREEN_WIDTH = 500
 
 # VARIABLES
 collided = False
 
 # Barra blanca que separa
-seperator = pg.Rect(210, 0, 5, SCREEN_HEIGHT)
+seperator = pg.Rect(410, 0, 5, SCREEN_HEIGHT)
 
 pg.init()
 

@@ -28,14 +28,14 @@ class Player(Entity):
     def move(self, move_speed):
         self.position.xy += self.direction.xy * move_speed
         # Asegurar que el jugador no se salga de la zona designada
-        if self.position.x >= 248:
-            self.position.x = 240
-        elif self.position.x <= 210:
-            self.position.x = 210
+        if self.position.x >= 488:
+            self.position.x = 488
+        elif self.position.x <= 411:
+            self.position.x = 411
         if self.position.y <= 0:
             self.position.y = 0
-        elif self.position.y >= 223:
-            self.position.y = 223
+        elif self.position.y >= 383:
+            self.position.y = 383
 
         # Actualizar el rect a la posición
         self.rect.x = self.position.x
