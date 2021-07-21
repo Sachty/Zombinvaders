@@ -12,6 +12,7 @@ class ZombieGenerator:
         self.zombies = pg.sprite.Group()
         self.delta = 500
 
+
     def spawn(self, dt, all_sprites):
         self.delta -= dt
         if self.delta < 0:

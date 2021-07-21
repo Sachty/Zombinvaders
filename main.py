@@ -1,9 +1,11 @@
 import pygame as pg
 import entities
 from zombie_generator import ZombieGenerator
+from entities import sounds
+
 # CONSTANTS
-SCREEN_HEIGHT = 240
-SCREEN_WIDTH = 256
+SCREEN_HEIGHT = 400
+SCREEN_WIDTH = 500
 
 # VARIABLES
 collided = False
@@ -34,7 +36,7 @@ players.add(zero)
 
 clock = pg.time.Clock()
 # Iniciar generador de zombies.
-zombie_generator = ZombieGenerator([], 0.3, 50)
+zombie_generator = ZombieGenerator([], 0.3, 80)#new
 zombies = []
 
 while running:
@@ -55,6 +57,7 @@ while running:
     for player in players:
         player.direction.xy = (0, 0)
     keys = pg.key.get_pressed()
+
     # Input Hero
     if keys[pg.K_LEFT]:
         hero.direction.x += -1
@@ -64,8 +67,10 @@ while running:
         hero.direction.y += -1
     if keys[pg.K_DOWN]:
         hero.direction.y += 1
-    if keys[pg.K_RETURN]:
+    if keys[pg.K_RSHIFT]:
+        sounds("disparo.mp3")
         hero.shoot(dt)
+     
     # Input Zero
     if keys[pg.K_a]:
         zero.direction.x += -1
@@ -75,8 +80,10 @@ while running:
         zero.direction.y += -1
     if keys[pg.K_s]:
         zero.direction.y += 1
-    if keys[pg.K_c]:
+    if keys[pg.K_g]:
+        sounds("disparo.mp3")
         zero.shoot(dt)
+       
 
     for player in players:
         if player.direction.x != 0 or player.direction.y != 0:  # Normalize vector
@@ -93,11 +100,21 @@ while running:
     for zombie in zombie_generator.zombies:
         zombie.direction.xy = (0, 0)
         zombie.direction.x += 1
+        
         zombie.move(zombie.SPEED * delta_speed)
         for player in players:  # Colisión balas con zombies
             gets_hit = pg.sprite.spritecollide(zombie, player.bullets, True)
-            if gets_hit:
-                zombie.kill()
+            gets_attacked= pg.sprite.spritecollide(zombie, players, True) # new
+            if gets_hit: 
+                zombie.health -= 10
+                print(zombie.health)
+                if zombie.health <= 0:
+                    zombie.kill()
+                    player.score+=100
+
+            if gets_attacked: # new
+                sounds("reaccion golpe.mp3")
+                
     # Mover las balas
     for player in players:
         for bullet in player.bullets:
