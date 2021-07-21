@@ -11,6 +11,7 @@ seperator_hp = 5
 # Barra blanca que separa
 seperator = pg.Rect(210, 0, seperator_hp, SCREEN_HEIGHT)
 
+pg.mixer.init()
 pg.init()
 
 # RESIZABLE para poder cambiar su tamaño
@@ -65,6 +66,7 @@ while running:
     if keys[pg.K_DOWN]:
         hero.direction.y += 1
     if keys[pg.K_RETURN]:
+        entities.sounds("disparo.ogg")
         hero.shoot(dt)
     # Input Zero
     if keys[pg.K_a]:
@@ -76,6 +78,7 @@ while running:
     if keys[pg.K_s]:
         zero.direction.y += 1
     if keys[pg.K_c]:
+        entities.sounds("disparo.ogg")
         zero.shoot(dt)
 
     for player in players:
@@ -96,8 +99,14 @@ while running:
         zombie.move(zombie.SPEED * delta_speed)
         for player in players:  # Colisión balas con zombies
             gets_hit = pg.sprite.spritecollide(zombie, player.bullets, True)
+            gets_attacked= pg.sprite.spritecollide(zombie, players, True)
             if gets_hit:
-                zombie.kill()
+                zombie.health -= 1
+                if zombie.health <= 0:
+                    zombie.kill()
+                    player.score += 100
+            if gets_attacked:
+                entities.sounds("reaccion_golpe.ogg")
     # Mover las balas
     for player in players:
         for bullet in player.bullets:

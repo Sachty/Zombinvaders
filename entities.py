@@ -1,5 +1,6 @@
 import pygame as pg
 
+
 # Cada entidad recibe un sprite, una posición x, y una posición y
 class Entity(pg.sprite.Sprite):
     def __init__(self, spr, x, y):
@@ -58,6 +59,7 @@ class Zombie(Entity):
     def __init__(self, spr, x, y):
         super().__init__(spr, x, y)
         self.SPEED = 0.05
+        self.health = 5
 
 
 class Bullet(Entity):
@@ -65,3 +67,8 @@ class Bullet(Entity):
         super().__init__(spr, x, y)
         self.SPEED = 0.8
         self.direction.y = inertia
+
+
+def sounds(anysound):  # agregar sonido a objeto
+    sound = pg.mixer.Sound("sounds/"+anysound)
+    return sound.play()
