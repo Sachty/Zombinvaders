@@ -60,28 +60,16 @@ class Zombie(Entity):
     def __init__(self, spr, x, y):
         super().__init__(spr, x, y)
         self.SPEED = 0.05
-<<<<<<< HEAD
         self.health = 5
 
-=======
-        self.health= 50 # new
->>>>>>> 844cde50213367e725c93fd4ce129a47809f2f54
 
 class Bullet(Entity):
     def __init__(self, spr, x, y, inertia):
         super().__init__(spr, x, y)
         self.SPEED = 0.8
         self.direction.y = inertia
-<<<<<<< HEAD
-
 
 def sounds(anysound):  # agregar sonido a objeto
     sound = pg.mixer.Sound("sounds/"+anysound)
     return sound.play()
-=======
-        
-    def sounds(anysound): # agregar sonido a objeto
-        sound= pg.mixer.Sound("sounds/"+anysound)
-        return sound.play()
-        
->>>>>>> 844cde50213367e725c93fd4ce129a47809f2f54
+

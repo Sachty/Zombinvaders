@@ -68,13 +68,9 @@ while running:
         hero.direction.y += -1
     if keys[pg.K_DOWN]:
         hero.direction.y += 1
-<<<<<<< HEAD
     if keys[pg.K_RETURN]:
         entities.sounds("disparo.ogg")
-=======
-    if keys[pg.K_RSHIFT]:
-        sounds("disparo.mp3")
->>>>>>> 844cde50213367e725c93fd4ce129a47809f2f54
+
         hero.shoot(dt)
      
     # Input Zero
@@ -86,13 +82,9 @@ while running:
         zero.direction.y += -1
     if keys[pg.K_s]:
         zero.direction.y += 1
-<<<<<<< HEAD
     if keys[pg.K_c]:
         entities.sounds("disparo.ogg")
-=======
-    if keys[pg.K_g]:
-        sounds("disparo.mp3")
->>>>>>> 844cde50213367e725c93fd4ce129a47809f2f54
+
         zero.shoot(dt)
        
 
@@ -115,7 +107,6 @@ while running:
         zombie.move(zombie.SPEED * delta_speed)
         for player in players:  # Colisión balas con zombies
             gets_hit = pg.sprite.spritecollide(zombie, player.bullets, True)
-<<<<<<< HEAD
             gets_attacked= pg.sprite.spritecollide(zombie, players, True)
             if gets_hit:
                 zombie.health -= 1
@@ -124,19 +115,7 @@ while running:
                     player.score += 100
             if gets_attacked:
                 entities.sounds("reaccion_golpe.ogg")
-=======
-            gets_attacked= pg.sprite.spritecollide(zombie, players, True) # new
-            if gets_hit: 
-                zombie.health -= 10
-                print(zombie.health)
-                if zombie.health <= 0:
-                    zombie.kill()
-                    player.score+=100
 
-            if gets_attacked: # new
-                sounds("reaccion golpe.mp3")
-                
->>>>>>> 844cde50213367e725c93fd4ce129a47809f2f54
     # Mover las balas
     for player in players:
         for bullet in player.bullets:
