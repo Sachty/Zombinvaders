@@ -1,35 +1,51 @@
 import pygame
-ancho_pantalla = 800
-alto_pantalla = 500
-
+from images import *
+ancho_pantalla = 512
+alto_pantalla = 480
 screen = pygame.display.set_mode((ancho_pantalla,alto_pantalla))
 pygame.display.set_caption("BOTONES MARCA BRUH")
-flechaiz = pygame.image.load("flecha izquierda.jpeg").convert_alpha()
-flechaiz = pygame.transform.scale(flechaiz,(50,50))
-flechader = pygame.image.load("flecha derecha.jpeg").convert_alpha()
-flechader = pygame.transform.scale(flechader,(50,50))
-boton_inicio = pygame.image.load("start.jpeg").convert_alpha()
-boton_inicio = pygame.transform.scale(boton_inicio,(200,100))
-boton_exit = pygame.image.load("exit.jpeg").convert_alpha()
-boton_exit = pygame.transform.scale(boton_exit,(200,100))
-boton_highscore = pygame.image.load("highscore.jpeg").convert_alpha()
-boton_highscore = pygame.transform.scale(boton_highscore,(200,100))
-boton_inicio2 = pygame.image.load("start2.jpeg").convert_alpha()
-boton_inicio2 = pygame.transform.scale(boton_inicio2,(200,100))
-boton_highscore2 = pygame.image.load("highscore2.jpeg").convert_alpha()
-boton_highscore2 = pygame.transform.scale(boton_highscore2,(200,100))
-boton_exit2 = pygame.image.load("exit2.jpeg").convert_alpha()
-boton_exit2 = pygame.transform.scale(boton_exit2,(200,100))
 cursor = pygame.mouse.get_pos()
-
+background = fondo
+background2 = fondo2
+def fade(ancho,alto):
+    fade = pygame.Surface((ancho,alto))
+    fade.fill((0,0,0))
+    for i in range(0,300):
+        fade.set_alpha(i)
+        screen.blit(fade,(0,0))
+        pygame.display.update()
+        pygame.time.delay(4)
+def controles():
+    trans = True
+    while trans:
+        screen.blit(fondo2,[0,0])
+        pygame.draw.line(screen, (152, 255, 152), (256, 100), (256, 300), 10)
+        texto3.draw()
+        texto4.draw()
+        controles1.draw()
+        controles2.draw()
+        if flechaiz1.draw():
+            fade(800,500)
+            submenu()
+        if flechader1.draw():
+            print("click")
+        for i in pygame.event.get():
+            if i.type == pygame.QUIT:
+                quit()
+        pygame.display.update()
 def submenu():
     salir = True
     while salir:
-        screen.fill((255,255,255))
-        flechaiz.draw()
-        flechader.draw()
-        if exit1.draw():
-            quit()
+        screen.blit(background2,[0,0])
+        pygame.draw.line(screen,(153,255,153),(256,100),(256,300),10)
+        texto.draw()
+        texto2.draw()
+        if flechaiz1.draw():
+            fade(800,500)
+            menu()
+        if flechader1.draw():
+            fade(800,500)
+            controles()
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 quit()
@@ -57,22 +73,30 @@ class Boton():
         else:
             screen.blit(self.imagen,(self.rect.x, self.rect.y))
         return action
-inicio = Boton(300,100,boton_inicio,boton_inicio2)
-exit = Boton(300,350,boton_exit,boton_exit2)
-highscore = Boton(300,225,boton_highscore,boton_highscore2)
-exit1 = Boton(300,350,boton_exit,boton_exit2)
-flechaiz = Boton(250,365,flechaiz,flechaiz)
-flechader = Boton(495,365,flechader,flechader)
-loop = True
-while loop:
-    screen.fill((202,228,241))
-    if inicio.draw():
-        submenu()
-    if exit.draw():
-        quit()
-        print("exit")
-    highscore.draw()
-    for i in pygame.event.get():
-        if i.type == pygame.QUIT:
-            loop = False
-    pygame.display.update()
+inicio = Boton(25,50,boton_inicio,boton_inicio2)
+exit = Boton(25,250,boton_exit,boton_exit2)
+highscore = Boton(25,150,boton_highscore,boton_highscore2)
+flechaiz1 = Boton(0,365,flechaiz,flechaiz2)
+flechader1 = Boton(410,365,flechader,flechader2)
+texto = Boton(0,20,texto,texto)
+texto2 = Boton(262,20,texto2,texto2)
+texto3 = Boton(0,10,texto3,texto3)
+texto4 = Boton(262,10,texto4,texto4)
+controles1 = Boton(20,140,controles1,controles1)
+controles2 = Boton(290,140,controles2,controles2)
+def menu():
+    loop = True
+    while loop:
+        screen.blit(background, [0,0])
+        if inicio.draw():
+            fade(800,500)
+            submenu()
+        if exit.draw():
+            quit()
+            print("exit")
+        highscore.draw()
+        for i in pygame.event.get():
+            if i.type == pygame.QUIT:
+                loop = False
+        pygame.display.update()
+menu()
