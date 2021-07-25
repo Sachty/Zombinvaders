@@ -53,7 +53,8 @@ class Player(Entity):
             #     inertia = pg.math.Vector2.normalize(self.direction.xy)
             self.bullets.add(Bullet("bullet", self.rect.x, self.rect.y - 8, inertia.y))
             self.delta = 250
-        
+
+    
 
 class Zombie(Entity):
     def __init__(self, spr, x, y):
@@ -66,8 +67,9 @@ class Bullet(Entity):
         super().__init__(spr, x, y)
         self.SPEED = 0.8
         self.direction.y = inertia
-        
-    def sounds(anysound): # agregar sonido a objeto
+
+ # afuera por ahora       
+def sounds(anysound): # agregar sonido a objeto
         sound= pg.mixer.Sound("sounds/"+anysound)
         return sound.play()
         
