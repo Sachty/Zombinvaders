@@ -10,11 +10,14 @@ SCREEN_WIDTH = 500
 
 # VARIABLES
 collided = False
+
 seperator_hp = 100
 
 # Barra blanca que separa
 seperator = pg.Rect(315, 0, seperator_hp, SCREEN_HEIGHT)
 
+
+pg.mixer.init()
 pg.init()
 
 # RESIZABLE para poder cambiar su tamaño
@@ -87,8 +90,9 @@ while running:
         hero.direction.y += -1
     if keys[pg.K_DOWN]:
         hero.direction.y += 1
-    if keys[pg.K_RSHIFT]:
-        sounds("disparo.mp3")
+    if keys[pg.K_RETURN]:
+        entities.sounds("disparo.ogg")
+
         hero.shoot(dt)
      
     # Input Zero
@@ -100,8 +104,9 @@ while running:
         zero.direction.y += -1
     if keys[pg.K_s]:
         zero.direction.y += 1
-    if keys[pg.K_g]:
-        sounds("disparo.mp3")
+    if keys[pg.K_c]:
+        entities.sounds("disparo.ogg")
+
         zero.shoot(dt)
        
 
@@ -152,20 +157,23 @@ while running:
             if gets_hit: 
                 zombie.health -= 10
                 print(zombie.health)
+
                 if zombie.health <= 0:
                     zombie.kill()
-                    player.score+=100
+                    player.score += 100
+            if gets_attacked:
+                entities.sounds("reaccion_golpe.ogg")
+
 
             if gets_attacked: # new
                 sounds("reaccion golpe.mp3")
-            
+
     # Mover las balas
     for player in players:
         for bullet in player.bullets:
             bullet.direction.x = -1
             bullet.move(bullet.SPEED * delta_speed)
-    #timer
- 
+
     fake_screen.blit(font.render(text, 1, (230,0,0)), (10, 10))
     pg.draw.rect(fake_screen, (255, 255, 255), seperator)
     all_sprites.draw(fake_screen)

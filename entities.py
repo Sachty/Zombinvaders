@@ -1,5 +1,6 @@
 import pygame as pg
 
+
 # Cada entidad recibe un sprite, una posición x, y una posición y
 class Entity(pg.sprite.Sprite):
     def __init__(self, spr, x, y):
@@ -16,6 +17,9 @@ class Entity(pg.sprite.Sprite):
         self.rect.x = self.position.x
         self.rect.y = self.position.y
     
+
+        if abs(self.position.x) > 300:
+            self.kill()
 
 
 class Player(Entity):
@@ -42,8 +46,13 @@ class Player(Entity):
         self.rect.y = self.position.y
     
     def shoot(self, delta):
+        inertia = pg.math.Vector2(0, 0)
         if self.delta < 0:
-            self.bullets.add(Bullet("bullet", self.rect.x, self.rect.y - 8))
+            # Lo de abajo prendería inercia para las balas, algo que no estoy
+            # seguro si es divertido o no
+            # if self.direction.y != 0:
+            #     inertia = pg.math.Vector2.normalize(self.direction.xy)
+            self.bullets.add(Bullet("bullet", self.rect.x, self.rect.y - 8, inertia.y))
             self.delta = 250
         
 
@@ -51,13 +60,16 @@ class Zombie(Entity):
     def __init__(self, spr, x, y):
         super().__init__(spr, x, y)
         self.SPEED = 0.05
-        self.health= 50 # new
+        self.health = 5
+
 
 class Bullet(Entity):
-    def __init__(self, spr, x, y):
+    def __init__(self, spr, x, y, inertia):
         super().__init__(spr, x, y)
         self.SPEED = 0.8
+        self.direction.y = inertia
 
-def sounds(anysound): # agregar sonido a objeto
-        sound= pg.mixer.Sound("sounds/"+anysound)
-        return sound.play()
+def sounds(anysound):  # agregar sonido a objeto
+    sound = pg.mixer.Sound("sounds/"+anysound)
+    return sound.play()
+
