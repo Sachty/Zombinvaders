@@ -41,4 +41,4 @@ dist
 .vagrant
 *.egg-info/
 *.so
-__pycache__
+__pycache__/
