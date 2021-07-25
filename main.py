@@ -9,9 +9,9 @@ SCREEN_WIDTH = 500
 
 # VARIABLES
 collided = False
-
+seperator_hp = 5
 # Barra blanca que separa
-seperator = pg.Rect(410, 0, 5, SCREEN_HEIGHT)
+seperator = pg.Rect(210, 0, seperator_hp, SCREEN_HEIGHT)
 
 pg.init()
 
@@ -120,6 +120,8 @@ while running:
         for bullet in player.bullets:
             bullet.direction.x = -1
             bullet.move(bullet.SPEED * delta_speed)
+    # if pg.sprite.spritecollide(seperator, zombie_generator.zombies, True):
+    #     print("Oof")
 
     pg.draw.rect(fake_screen, (255, 255, 255), seperator)
     all_sprites.draw(fake_screen)
