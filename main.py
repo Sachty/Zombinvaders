@@ -1,4 +1,5 @@
 import pygame as pg
+from pygame.sprite import spritecollide
 import entities
 from zombie_generator import ZombieGenerator
 from entities import sounds
@@ -7,13 +8,13 @@ from entities import sounds
 SCREEN_HEIGHT = 400
 SCREEN_WIDTH = 500
 
-# VARIABLES
+# VARIABLESgit branch
 collided = False
-seperator_hp = 5
-# Barra blanca que separa
-seperator = pg.Rect(210, 0, seperator_hp, SCREEN_HEIGHT)
+seperator_hp = 100
 
-pg.mixer.init()
+# Barra blanca que separa
+seperator = pg.Rect(315, 0, seperator_hp, SCREEN_HEIGHT)
+
 pg.init()
 
 # RESIZABLE para poder cambiar su tamaño
@@ -40,7 +41,20 @@ clock = pg.time.Clock()
 zombie_generator = ZombieGenerator([], 0.3, 80)#new
 zombies = []
 
+# Imagen al perder
+game_over = pg.image.load("assets/over.gif")
+posx,posy= 0,-85
+
+# Timer
+clock = pg.time.Clock()
+counter, font= 30, "Consolas"
+counter, text =counter,"Timer: "+ str(counter).rjust(3)
+pg.time.set_timer(pg.USEREVENT, 1000)
+font = pg.font.SysFont(font, 15)
+
+sounds("gamesong3.mp3")# solo para no aburrirse
 while running:
+    
     # limit the framerate and get the delta time
     dt = clock.tick(120)
     # convert the delta to seconds (for easier calculation)
@@ -49,6 +63,11 @@ while running:
     fake_screen.fill((0, 0, 0))
 
     for event in pg.event.get():
+        # TIMER
+        if event.type == pg.USEREVENT: 
+                counter -= 1
+                text ="Timer: "+ str(counter).rjust(3) if counter > 0 else "Se acabó D:"
+
         if event.type == pg.QUIT:
             running = False
         elif event.type == pg.VIDEORESIZE:
@@ -68,9 +87,8 @@ while running:
         hero.direction.y += -1
     if keys[pg.K_DOWN]:
         hero.direction.y += 1
-    if keys[pg.K_RETURN]:
-        entities.sounds("disparo.ogg")
-
+    if keys[pg.K_RSHIFT]:
+        sounds("disparo.mp3")
         hero.shoot(dt)
      
     # Input Zero
@@ -82,9 +100,8 @@ while running:
         zero.direction.y += -1
     if keys[pg.K_s]:
         zero.direction.y += 1
-    if keys[pg.K_c]:
-        entities.sounds("disparo.ogg")
-
+    if keys[pg.K_g]:
+        sounds("disparo.mp3")
         zero.shoot(dt)
        
 
@@ -98,7 +115,16 @@ while running:
         player.delta -= dt
 
     # Zombie Generator
-    zombie_generator.spawn(dt, all_sprites)
+    if seperator_hp>0 and counter>0: # Continua generando zombies
+        zombie_generator.spawn(dt, all_sprites)
+       
+        
+    elif seperator_hp==0 and counter>0: # PERDIO, ya no genera más zombies
+        fake_screen.blit(game_over,(posx,posy))
+        counter=0 # Detiene el counter si perdio
+
+    elif seperator_hp==0 and counter<=0: # PERDIO y se sigue mostrando imagen de "Game Over"
+        fake_screen.blit(game_over,(posx,posy))
 
     for zombie in zombie_generator.zombies:
         zombie.direction.xy = (0, 0)
@@ -107,23 +133,40 @@ while running:
         zombie.move(zombie.SPEED * delta_speed)
         for player in players:  # Colisión balas con zombies
             gets_hit = pg.sprite.spritecollide(zombie, player.bullets, True)
-            gets_attacked= pg.sprite.spritecollide(zombie, players, True)
-            if gets_hit:
-                zombie.health -= 1
+            gets_attacked= pg.sprite.spritecollide(zombie, players, True) # new
+            if seperator.colliderect(zombie):
+                print("boom")
+                sounds("reaccion golpe.mp3")
+                zombie.kill()
+                seperator_hp-=5
+                seperator = pg.Rect(315, 0, seperator_hp, SCREEN_HEIGHT)
+                if seperator_hp==0:
+                    print("Game Over")
+                    print(player.score)
+                    seperator = pg.Rect(315, 0, seperator_hp, SCREEN_HEIGHT)
+                    break  
+                if seperator_hp>0 and counter==0 :
+                    print("Winnnnn!")
+                        
+
+            if gets_hit: 
+                zombie.health -= 10
+                print(zombie.health)
                 if zombie.health <= 0:
                     zombie.kill()
-                    player.score += 100
-            if gets_attacked:
-                entities.sounds("reaccion_golpe.ogg")
+                    player.score+=100
 
+            if gets_attacked: # new
+                sounds("reaccion golpe.mp3")
+            
     # Mover las balas
     for player in players:
         for bullet in player.bullets:
             bullet.direction.x = -1
             bullet.move(bullet.SPEED * delta_speed)
-    # if pg.sprite.spritecollide(seperator, zombie_generator.zombies, True):
-    #     print("Oof")
-
+    #timer
+ 
+    fake_screen.blit(font.render(text, 1, (230,0,0)), (10, 10))
     pg.draw.rect(fake_screen, (255, 255, 255), seperator)
     all_sprites.draw(fake_screen)
     for player in players:
