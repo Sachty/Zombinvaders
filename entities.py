@@ -63,6 +63,13 @@ class Zombie(Entity):
         self.health = 5
 
 
+class FastZombie(Entity):
+    def __init__(self, spr, x, y):
+        super().__init__(spr, x, y)
+        self.SPEED = 0.08
+        self.health = 3
+
+
 class Bullet(Entity):
     def __init__(self, spr, x, y, inertia):
         super().__init__(spr, x, y)
