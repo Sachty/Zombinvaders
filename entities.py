@@ -8,7 +8,7 @@ class Entity(pg.sprite.Sprite):
         super().__init__()
         self.position = pg.Vector2(x, y)
         self.direction = pg.Vector2(0, 0)
-        self.SPEED = 0.1
+        self.SPEED = 0.2
         try:
             self.image = pg.image.load(f"assets/{spr}.png").convert_alpha()
             self.rect = self.image.get_rect()
@@ -21,7 +21,7 @@ class Entity(pg.sprite.Sprite):
         self.rect.x = self.position.x
         self.rect.y = self.position.y
 
-        if abs(self.position.x) > 300:
+        if abs(self.position.x) > 600:
             self.kill()
 
 
@@ -54,14 +54,14 @@ class Player(Entity):
     def move(self, move_speed):
         self.position.xy += self.direction.xy * move_speed
         # Asegurar que el jugador no se salga de la zona designada
-        if self.position.x >= 248:
-            self.position.x = 248
-        elif self.position.x <= 216:
-            self.position.x = 216
+        if self.position.x >= 240 * 2:
+            self.position.x = 240 * 2
+        elif self.position.x <= 216 * 2:
+            self.position.x = 216 * 2
         if self.position.y <= 0:
             self.position.y = 0
-        elif self.position.y >= 226:
-            self.position.y = 226
+        elif self.position.y >= 226 * 2:
+            self.position.y = 226 * 2
 
         # Actualizar el rect a la posición
         self.rect.x = self.position.x
@@ -86,7 +86,7 @@ class Player(Entity):
 class Zombie(Entity):
     def __init__(self, spr="Zombie", x=-16, y=16):
         super().__init__(spr, x, y)
-        self.SPEED = 0.05
+        self.SPEED = 0.1
         self.health = 3
         self.value = 100
 
@@ -118,7 +118,7 @@ class Zombie(Entity):
 class FastZombie(Zombie):
     def __init__(self, spr="FastZombie", x=-16, y=16):
         super().__init__(spr, x, y)
-        self.SPEED = 0.08
+        self.SPEED = 0.16
         self.health = 2
         self.value = 200
     
@@ -138,7 +138,7 @@ class ZombieVariant(Zombie):
 class TankZombie(Zombie):
     def __init__(self, spr="tankzombie", x=-16, y=16):
         super().__init__(spr, x, y)
-        self.SPEED = 0.02
+        self.SPEED = 0.04
         self.health = 4
 
 class ZigZagZombie(Zombie):
@@ -166,7 +166,7 @@ class FastZigZombie(ZigZagZombie):
 class Bullet(Entity):
     def __init__(self, spr, x, y, inertia):
         super().__init__(spr, x, y)
-        self.SPEED = 0.8
+        self.SPEED = 1.6
         self.direction.y = inertia
 
 

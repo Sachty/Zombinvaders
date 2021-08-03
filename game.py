@@ -3,14 +3,14 @@ import entities
 from zombie_generator import ZombieGenerator
 def game(level, difficulty):
     # CONSTANTS
-    SCREEN_HEIGHT = 240
-    SCREEN_WIDTH = 256
+    SCREEN_HEIGHT = 240 * 2
+    SCREEN_WIDTH = 256 * 2
 
     # VARIABLES
     collided = False
     seperator_hp = 5
     # Barra blanca que separa
-    seperator = pg.Rect(210, 0, seperator_hp, SCREEN_HEIGHT)
+    seperator = pg.Rect(420, 0, seperator_hp, SCREEN_HEIGHT)
 
     pg.mixer.init()
     pg.init()
@@ -36,12 +36,12 @@ def game(level, difficulty):
 
     clock = pg.time.Clock()
     # Iniciar generador de zombies.
-    zombie_generator = ZombieGenerator(level - difficulty, level/10 + 0.07 - difficulty/20, 50)
+    zombie_generator = ZombieGenerator(level - difficulty, level/10 + 0.07 - difficulty/20)
 
 
     while running:
         # limit the framerate and get the delta time
-        dt = clock.tick(120)
+        dt = clock.tick(60)
         # convert the delta to seconds (for easier calculation)
         delta_speed = float(dt)
 
@@ -114,7 +114,7 @@ def game(level, difficulty):
             for bullet in player.bullets:
                 bullet.direction.x = -1
                 bullet.move(bullet.SPEED * delta_speed)
-        seperator = pg.Rect(210 -seperator_hp, 0, seperator_hp, SCREEN_HEIGHT)
+        seperator = pg.Rect(420 -seperator_hp, 0, seperator_hp, SCREEN_HEIGHT)
 
         pg.draw.rect(fake_screen, (255, 255, 255), seperator)
         all_sprites.draw(fake_screen)
@@ -125,3 +125,5 @@ def game(level, difficulty):
 
         # Actualizar la pantalla
         pg.display.flip()
+
+game(2, 1)

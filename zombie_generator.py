@@ -4,11 +4,10 @@ from entities import ZigZagZombie, Zombie, ZombieVariant, FastZombie, TankZombie
 
 
 class ZombieGenerator:
-    def __init__(self, level, frequency, maximum):
+    def __init__(self, level, frequency):
         self.level = level
         self.zombie_data = [Zombie, Zombie, ZombieVariant, FastZombie, TankZombie,ZigZagZombie, FastZigZombie]
         self.frequency = frequency
-        self.maximum = maximum
         self.count = 0
         self.zombies = pg.sprite.Group()
         self.delta = 500
@@ -18,7 +17,7 @@ class ZombieGenerator:
         if self.delta < 0:
             self.delta = random.randint(100, 800)
             self.count += 1
-            if self.count < self.maximum and random.random() < self.frequency:
+            if random.random() < self.frequency:
                 if random.random() > 0.8:
                     choice = random.randint(0, self.level)
                 else:
