@@ -88,6 +88,31 @@ class Zombie(Entity):
         self.SPEED = 0.05
         self.health = 5
 
+        self.sprites = []
+        self.sprites.append(pg.image.load(f"assets/{spr}1.png"))
+        self.sprites.append(pg.image.load(f"assets/{spr}2.png"))
+        self.current_sprite = 0.0
+        self.image = self.sprites[int(self.current_sprite)]
+
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+    
+    def animate(self):
+        animation_speed = 0.02
+        self.image = self.sprites[int(self.current_sprite)]
+
+        self.current_sprite += animation_speed
+
+        if self.current_sprite > len(self.sprites):
+            self.current_sprite = 0.0
+    
+    def move(self, move_speed):
+        self.position.xy += self.direction.xy * move_speed
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
+
+        self.animate()
+
 class FastZombie(Entity):
     def __init__(self, spr, x, y):
         super().__init__(spr, x, y)

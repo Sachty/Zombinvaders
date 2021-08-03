@@ -18,6 +18,6 @@ class ZombieGenerator:
             self.delta = random.randint(100, 800)
             self.count += 1
             if self.count < self.maximum and random.random() < self.frequency:
-                new_zombie = (Zombie("player2", -16, random.randint(0, 228)))
+                new_zombie = (Zombie("zombie", -16, random.randint(0, 228)))
                 self.zombies.add(new_zombie)
                 all_sprites.add(new_zombie)
