@@ -36,8 +36,9 @@ def game():
 
     clock = pg.time.Clock()
     # Iniciar generador de zombies.
-    zombie_generator = ZombieGenerator([], 0.3, 50)
-    zombies = []
+    zombie_generator = ZombieGenerator(1, 0.3, 50)
+
+    
 
     while running:
         # limit the framerate and get the delta time

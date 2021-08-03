@@ -1,11 +1,12 @@
 import random
 import pygame as pg
-from entities import Zombie
+from entities import Zombie, FastZombie
 
 
 class ZombieGenerator:
-    def __init__(self, zombie_data, frequency, maximum):
-        self.zombie_data = zombie_data
+    def __init__(self, level, frequency, maximum):
+        self.level = level
+        self.zombie_data = [Zombie, FastZombie]
         self.frequency = frequency
         self.maximum = maximum
         self.count = 0
@@ -18,6 +19,7 @@ class ZombieGenerator:
             self.delta = random.randint(100, 800)
             self.count += 1
             if self.count < self.maximum and random.random() < self.frequency:
-                new_zombie = (Zombie("zombie", -16, random.randint(0, 228)))
+                choice = random.randint(0, self.level)
+                new_zombie = self.zombie_data[choice](y=random.randint(0, 228))
                 self.zombies.add(new_zombie)
                 all_sprites.add(new_zombie)

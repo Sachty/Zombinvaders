@@ -83,7 +83,7 @@ class Player(Entity):
 
 
 class Zombie(Entity):
-    def __init__(self, spr, x, y):
+    def __init__(self, spr="Zombie", x=-16, y=16):
         super().__init__(spr, x, y)
         self.SPEED = 0.05
         self.health = 5
@@ -113,11 +113,20 @@ class Zombie(Entity):
 
         self.animate()
 
-class FastZombie(Entity):
-    def __init__(self, spr, x, y):
+class FastZombie(Zombie):
+    def __init__(self, spr="FastZombie", x=-16, y=16):
         super().__init__(spr, x, y)
         self.SPEED = 0.08
         self.health = 3
+    
+    def animate(self):
+        animation_speed = 0.04
+        self.image = self.sprites[int(self.current_sprite)]
+
+        self.current_sprite += animation_speed
+
+        if self.current_sprite > len(self.sprites):
+            self.current_sprite = 0.0
 
 
 class Bullet(Entity):
