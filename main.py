@@ -1,125 +1,106 @@
-import pygame as pg
-import entities
-from zombie_generator import ZombieGenerator
-def game():
-    # CONSTANTS
-    SCREEN_HEIGHT = 240
-    SCREEN_WIDTH = 256
+import pygame
+from images import *
+from game import *
+ancho_pantalla = 512
+alto_pantalla = 480
+screen = pygame.display.set_mode((ancho_pantalla,alto_pantalla))
+pygame.display.set_caption("BOTONES MARCA BRUH")
+cursor = pygame.mouse.get_pos()
+background = fondo
+background2 = fondo2
+def fade(ancho,alto):
+    fade = pygame.Surface((ancho,alto))
+    fade.fill((0,0,0))
+    for i in range(0,300):
+        fade.set_alpha(i)
+        screen.blit(fade,(0,0))
+        pygame.display.update()
+        pygame.time.delay(4)
+def controles():
+    trans = True
+    while trans:
+        screen.blit(fondo2,[0,0])
+        pygame.draw.line(screen, (152, 255, 152), (256, 100), (256, 300), 10)
+        texto3.draw()
+        texto4.draw()
+        controles1.draw()
+        controles2.draw()
+        if flechaiz1.draw():
+            fade(800,500)
+            submenu()
+        if flechader1.draw():
+            game()
+        for i in pygame.event.get():
+            if i.type == pygame.QUIT:
+                quit()
+        pygame.display.update()
+def submenu():
+    salir = True
+    while salir:
+        screen.blit(background2,[0,0])
+        pygame.draw.line(screen,(153,255,153),(256,100),(256,300),10)
+        texto.draw()
+        texto2.draw()
+        if flechaiz1.draw():
+            fade(800,500)
+            menu()
+        if flechader1.draw():
+            fade(800,500)
+            controles()
+        for i in pygame.event.get():
+            if i.type == pygame.QUIT:
+                quit()
+        pygame.display.update()
 
-    # VARIABLES
-    collided = False
-    seperator_hp = 5
-    # Barra blanca que separa
-    seperator = pg.Rect(210, 0, seperator_hp, SCREEN_HEIGHT)
-
-    pg.mixer.init()
-    pg.init()
-
-    # RESIZABLE para poder cambiar su tamaño
-    screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pg.RESIZABLE)
-    # fake_screen es donde se debería hacer todos los blits y draws
-    # Luego se le hace blit al screen para que todo este proporcional si cambia el tamaño de la pantalla
-    fake_screen = screen.copy()
-
-    running = True
-
-    # Initialize players
-    hero = entities.Player("player", 230, SCREEN_HEIGHT/3)
-    zero = entities.Player("player2", 230, SCREEN_HEIGHT * 2 / 3)
-    # agregar player a player.Group y all_sprites.Group
-    all_sprites = pg.sprite.Group()
-    all_sprites.add(hero)
-    all_sprites.add(zero)
-    players = pg.sprite.Group()
-    players.add(hero)
-    players.add(zero)
-
-    clock = pg.time.Clock()
-    # Iniciar generador de zombies.
-    zombie_generator = ZombieGenerator([], 0.3, 50)
-    zombies = []
-
-    while running:
-        # limit the framerate and get the delta time
-        dt = clock.tick(120)
-        # convert the delta to seconds (for easier calculation)
-        delta_speed = float(dt)
-
-        fake_screen.fill((0, 0, 0))
-
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                running = False
-            elif event.type == pg.VIDEORESIZE:
-                screen = pg.display.set_mode(event.size, pg.RESIZABLE)
-
-        # Input Handling
-        for player in players:
-            player.direction.xy = (0, 0)
-        keys = pg.key.get_pressed()
-        # Input Hero
-        if keys[pg.K_LEFT]:
-            hero.direction.x += -1
-        if keys[pg.K_RIGHT]:
-            hero.direction.x += 1
-        if keys[pg.K_UP]:
-            hero.direction.y += -1
-        if keys[pg.K_DOWN]:
-            hero.direction.y += 1
-        if keys[pg.K_RETURN]:
-            hero.shoot(dt)
-        # Input Zero
-        if keys[pg.K_a]:
-            zero.direction.x += -1
-        if keys[pg.K_d]:
-            zero.direction.x += 1
-        if keys[pg.K_w]:
-            zero.direction.y += -1
-        if keys[pg.K_s]:
-            zero.direction.y += 1
-        if keys[pg.K_c]:
-            zero.shoot(dt)
-
-        for player in players:
-            if player.direction.x != 0 or player.direction.y != 0:  # Normalize vector
-                pg.math.Vector2.normalize_ip(player.direction)
-
-            move_speed = player.SPEED * delta_speed
-
-            player.move(move_speed)
-            player.delta -= dt
-
-        # Zombie Generator
-        zombie_generator.spawn(dt, all_sprites)
-
-        for zombie in zombie_generator.zombies:
-            zombie.direction.xy = (0, 0)
-            zombie.direction.x += 1
-            zombie.move(zombie.SPEED * delta_speed)
-            for player in players:  # Colisión balas con zombies
-                gets_hit = pg.sprite.spritecollide(zombie, player.bullets, True)
-                gets_attacked= pg.sprite.spritecollide(zombie, players, True)
-                if gets_hit:
-                    zombie.health -= 1
-                    if zombie.health <= 0:
-                        zombie.kill()
-                        player.score += 100
-                if gets_attacked:
-                    entities.sounds("reaccion_golpe.ogg")
-        # Mover las balas
-        for player in players:
-            for bullet in player.bullets:
-                bullet.direction.x = -1
-                bullet.move(bullet.SPEED * delta_speed)
-        # if pg.sprite.spritecollide(seperator, zombie_generator.zombies, True):
-        #     print("Oof")
-
-        pg.draw.rect(fake_screen, (255, 255, 255), seperator)
-        all_sprites.draw(fake_screen)
-        for player in players:
-            player.bullets.draw(fake_screen)
-        # Transformar fake_screen al tamaño de screen, y hacerle blit.
-        screen.blit(pg.transform.scale(fake_screen, screen.get_rect().size), (0, 0))
-
-        # Actualizar la pantalla
-        pg.display.flip()
+class Boton():
+    def __init__(self,x,y,imagen,imagen2):
+        self.imagen = imagen
+        self.imagen2 = imagen2
+        self.rect = self.imagen.get_rect()
+        self.rect.topleft = (x, y)
+        self.rect2 = self.imagen2.get_rect()
+        self.rect2.topleft = (x, y)
+        self.clicked = False
+    def draw(self):
+        action = False
+        pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos):
+            screen.blit(self.imagen2,(self.rect2.x,self.rect2.y))
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                self.clicked = True
+                action = True
+            if pygame.mouse.get_pressed()[0] == 0 :
+                self.clicked = False
+        else:
+            screen.blit(self.imagen,(self.rect.x, self.rect.y))
+        return action
+inicio = Boton(25,50,boton_inicio,boton_inicio2)
+exit = Boton(25,250,boton_exit,boton_exit2)
+highscore = Boton(25,150,boton_highscore,boton_highscore2)
+flechaiz1 = Boton(0,365,flechaiz,flechaiz2)
+flechader1 = Boton(410,365,flechader,flechader2)
+texto = Boton(0,20,texto,texto)
+texto2 = Boton(262,20,texto2,texto2)
+texto3 = Boton(0,10,texto3,texto3)
+texto4 = Boton(262,10,texto4,texto4)
+controles1 = Boton(20,140,controles1,controles1)
+controles2 = Boton(290,140,controles2,controles2)
+def menu():
+    loop = True
+    while loop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                loop = False
+        screen.blit(background, [0,0])
+        if inicio.draw():
+            fade(800,500)
+            submenu()
+        if exit.draw():
+            quit()
+            print("exit")
+        highscore.draw()
+        for i in pygame.event.get():
+            if i.type == pygame.QUIT:
+                loop = False
+        pygame.display.update()
+menu()

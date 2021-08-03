@@ -49,11 +49,18 @@ class Player(Entity):
         if self.delta < 0:
             # Lo de abajo prendería inercia para las balas, algo que no estoy
             # seguro si es divertido o no
-            # if self.direction.y != 0:
-            #     inertia = pg.math.Vector2.normalize(self.direction.xy)
+            if self.direction.y != 0:
+                inertia = pg.math.Vector2.normalize(self.direction.xy)
             self.bullets.add(Bullet("bullet", self.rect.x, self.rect.y - 8, inertia.y))
             self.delta = 250
+            sounds("disparo.ogg")
 
+
+class Zombie(Entity):
+    def __init__(self, spr, x, y):
+        super().__init__(spr, x, y)
+        self.SPEED = 0.05
+        self.health = 5
 
 class Zombie(Entity):
     def __init__(self, spr, x, y):
