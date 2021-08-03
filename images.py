@@ -1,6 +1,5 @@
 import pygame
 
-
 texto = pygame.image.load("assets/menu/textos04.png")
 texto = pygame.transform.scale(texto,(250,150))
 texto2 = pygame.image.load("assets/menu/textos06.png")

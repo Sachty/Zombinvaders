@@ -21,7 +21,6 @@ class Entity(pg.sprite.Sprite):
         self.position.xy += self.direction.xy * move_speed
         self.rect.x = self.position.x
         self.rect.y = self.position.y
-    
 
         if abs(self.position.x) > 600:
             self.kill()
@@ -61,7 +60,6 @@ class Player(Entity):
     def move(self, move_speed):
         self.position.xy += self.direction.xy * move_speed
         # Asegurar que el jugador no se salga de la zona designada
-
         if self.position.x >= 240 * 2:
             self.position.x = 240 * 2
         elif self.position.x <= 216 * 2:
@@ -78,6 +76,7 @@ class Player(Entity):
         if abs(self.direction.x) > 0 or  abs(self.direction.y) > 0:
          self.animate()
 
+        
     def shoot(self, delta):
         inertia = pg.math.Vector2(0, 0)
         if self.delta < 0:
@@ -89,7 +88,7 @@ class Player(Entity):
             self.delta = 300
             sounds("disparo.ogg")
 
-            
+
 class Zombie(Entity):
     def __init__(self, spr="Zombie", x=-16, y=16):
         super().__init__(spr, x, y)
@@ -179,7 +178,7 @@ class Bullet(Entity):
         self.SPEED = 1.2
         self.direction.y = inertia
 
+
 def sounds(anysound):  # agregar sonido a objeto
     sound = pg.mixer.Sound("sounds/"+anysound)
     return sound.play()
-
