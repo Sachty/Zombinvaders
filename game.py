@@ -1,7 +1,7 @@
 import pygame as pg
 import entities
 from zombie_generator import ZombieGenerator
-def game():
+def game(level):
     # CONSTANTS
     SCREEN_HEIGHT = 240
     SCREEN_WIDTH = 256
@@ -36,9 +36,9 @@ def game():
 
     clock = pg.time.Clock()
     # Iniciar generador de zombies.
-    zombie_generator = ZombieGenerator(1, 0.3, 50)
+    zombie_generator = ZombieGenerator(level, level/10 + 0.3, 50)
 
-    
+
 
     while running:
         # limit the framerate and get the delta time
@@ -127,4 +127,4 @@ def game():
 
         # Actualizar la pantalla
         pg.display.flip()
-game()
+game(3)

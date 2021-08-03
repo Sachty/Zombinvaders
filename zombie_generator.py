@@ -19,7 +19,10 @@ class ZombieGenerator:
             self.delta = random.randint(100, 800)
             self.count += 1
             if self.count < self.maximum and random.random() < self.frequency:
-                choice = random.randint(0, self.level)
+                if random.random() > 0.8:
+                    choice = random.randint(0, self.level)
+                else:
+                    choice = random.randint(0, 1)
                 new_zombie = self.zombie_data[choice](y=random.randint(0, 228))
                 self.zombies.add(new_zombie)
                 all_sprites.add(new_zombie)

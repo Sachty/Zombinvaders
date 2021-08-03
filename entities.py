@@ -132,6 +132,11 @@ class ZombieVariant(Zombie):
     def __init__(self, spr="zombievariant", x=-16, y=16):
         super().__init__(spr, x, y)
 
+class TankZombie(Zombie):
+    def __init__(self, spr="tankzombie", x=-16, y=16):
+        super().__init__(spr, x, y)
+        self.SPEED = 0.02
+        self.health = 7
 
 class Bullet(Entity):
     def __init__(self, spr, x, y, inertia):
