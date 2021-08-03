@@ -1,6 +1,7 @@
 import pygame
 from images import *
 from game import game
+import sys
 ancho_pantalla = 512
 alto_pantalla = 480
 screen = pygame.display.set_mode((ancho_pantalla,alto_pantalla))
@@ -8,6 +9,8 @@ pygame.display.set_caption("Zombinvader")
 cursor = pygame.mouse.get_pos()
 background = fondo
 background2 = fondo2
+pygame.font.init()
+difficulty_text = pygame.font.SysFont(None, 30)
 
 with open("highscores.json", "w") as f:
     pass
@@ -23,6 +26,7 @@ def fade(ancho,alto):
         pygame.time.delay(3)
 def controles():
     trans = True
+    dificultad = 1
     while trans:
         screen.blit(fondo2,[0,0])
         pygame.draw.line(screen, (152, 255, 152), (256, 100), (256, 300), 10)
@@ -34,7 +38,21 @@ def controles():
             fade(800,500)
             submenu()
         if flechader1.draw():
-            game(2, 0)
+            game(1, dificultad)
+        if botondificultad.draw():
+            dificultad += 1
+            if dificultad > 2:
+                dificultad = 0
+        if dificultad == 0:
+            textsurface = difficulty_text.render("Difícil", False, (0, 0, 0))
+        elif dificultad == 1:
+            textsurface = difficulty_text.render("Normal", False, (0, 0, 0))
+        else:
+            textsurface = difficulty_text.render("Fácil", False, (0, 0, 0))
+        
+        screen.blit(textsurface, (228, 362))
+
+
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 quit()
@@ -90,6 +108,8 @@ texto3 = Boton(0,10,texto3,texto3)
 texto4 = Boton(262,10,texto4,texto4)
 controles1 = Boton(20,140,controles1,controles1)
 controles2 = Boton(290,140,controles2,controles2)
+
+botondificultad = Boton(232, 400, boton_dificultad, boton_dificultad2)
 def menu():
     loop = True
     while loop:
