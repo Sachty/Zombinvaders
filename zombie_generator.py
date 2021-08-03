@@ -14,6 +14,7 @@ class ZombieGenerator:
         self.delta = 500
         self.maximum = maximum
 
+
     def spawn(self, dt, all_sprites):
         self.delta -= dt
         if self.delta < 0:
