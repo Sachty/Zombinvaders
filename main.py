@@ -29,7 +29,7 @@ def controles():
             fade(800,500)
             submenu()
         if flechader1.draw():
-            game()
+            game(1, 1)
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 quit()

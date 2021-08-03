@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 
 
 # Cada entidad recibe un sprite, una posición x, y una posición y
@@ -78,7 +79,7 @@ class Player(Entity):
             # if self.direction.y != 0:
             #     inertia = pg.math.Vector2.normalize(self.direction.xy)
             self.bullets.add(Bullet("bullet", self.rect.x - 8, self.rect.y - 8, inertia.y))
-            self.delta = 350
+            self.delta = 300
             sounds("disparo.ogg")
 
 
@@ -86,7 +87,8 @@ class Zombie(Entity):
     def __init__(self, spr="Zombie", x=-16, y=16):
         super().__init__(spr, x, y)
         self.SPEED = 0.05
-        self.health = 5
+        self.health = 3
+        self.value = 100
 
         self.sprites = []
         self.sprites.append(pg.image.load(f"assets/{spr}1.png"))
@@ -117,7 +119,8 @@ class FastZombie(Zombie):
     def __init__(self, spr="FastZombie", x=-16, y=16):
         super().__init__(spr, x, y)
         self.SPEED = 0.08
-        self.health = 3
+        self.health = 2
+        self.value = 200
     
     def animate(self):
         animation_speed = 0.04
@@ -136,7 +139,29 @@ class TankZombie(Zombie):
     def __init__(self, spr="tankzombie", x=-16, y=16):
         super().__init__(spr, x, y)
         self.SPEED = 0.02
-        self.health = 7
+        self.health = 4
+
+class ZigZagZombie(Zombie):
+    def __init__(self, spr="zigzombie", x=-16, y=16):
+        super().__init__(spr, x, y)
+        numbers = [1, -1]
+        self.direction.y = 0.7 * random.choice(numbers)
+
+    def move(self, move_speed):
+        self.position.xy += self.direction.xy * move_speed
+        self.rect.x = self.position.x
+        self.rect.y = self.position.y
+
+        self.animate
+
+        if self.position.y > 226 or self.position.y < 0:
+            self.direction.y *= -1
+
+class FastZigZombie(ZigZagZombie):
+        def __init__(self, spr="fastzigzombie", x=-16, y=16):
+            super().__init__(spr, x, y)
+            self.SPEED = 0.08
+
 
 class Bullet(Entity):
     def __init__(self, spr, x, y, inertia):

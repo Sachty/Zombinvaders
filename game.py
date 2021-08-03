@@ -1,7 +1,7 @@
 import pygame as pg
 import entities
 from zombie_generator import ZombieGenerator
-def game(level):
+def game(level, difficulty):
     # CONSTANTS
     SCREEN_HEIGHT = 240
     SCREEN_WIDTH = 256
@@ -36,8 +36,7 @@ def game(level):
 
     clock = pg.time.Clock()
     # Iniciar generador de zombies.
-    zombie_generator = ZombieGenerator(level, level/10 + 0.3, 50)
-
+    zombie_generator = ZombieGenerator(level - difficulty, level/10 + 0.07 - difficulty/20, 50)
 
 
     while running:
@@ -94,8 +93,7 @@ def game(level):
         zombie_generator.spawn(dt, all_sprites)
 
         for zombie in zombie_generator.zombies:
-            zombie.direction.xy = (0, 0)
-            zombie.direction.x += 1
+            zombie.direction.x = 1
             zombie.move(zombie.SPEED * delta_speed)
 
             if seperator.colliderect(zombie):
@@ -108,7 +106,7 @@ def game(level):
                     zombie.health -= 1
                     if zombie.health <= 0:
                         zombie.kill()
-                        player.score += 100
+                        player.score += zombie.value
                 if gets_attacked:
                     entities.sounds("reaccion_golpe.ogg")
         # Mover las balas
@@ -127,4 +125,3 @@ def game(level):
 
         # Actualizar la pantalla
         pg.display.flip()
-game(3)

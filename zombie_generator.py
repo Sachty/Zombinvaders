@@ -1,12 +1,12 @@
 import random
 import pygame as pg
-from entities import Zombie, ZombieVariant, FastZombie, TankZombie
+from entities import ZigZagZombie, Zombie, ZombieVariant, FastZombie, TankZombie, FastZigZombie
 
 
 class ZombieGenerator:
     def __init__(self, level, frequency, maximum):
         self.level = level
-        self.zombie_data = [Zombie, ZombieVariant, FastZombie, TankZombie]
+        self.zombie_data = [Zombie, Zombie, ZombieVariant, FastZombie, TankZombie,ZigZagZombie, FastZigZombie]
         self.frequency = frequency
         self.maximum = maximum
         self.count = 0
