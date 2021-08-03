@@ -128,6 +128,10 @@ class FastZombie(Zombie):
         if self.current_sprite > len(self.sprites):
             self.current_sprite = 0.0
 
+class ZombieVariant(Zombie):
+    def __init__(self, spr="zombievariant", x=-16, y=16):
+        super().__init__(spr, x, y)
+
 
 class Bullet(Entity):
     def __init__(self, spr, x, y, inertia):
