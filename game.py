@@ -160,17 +160,23 @@ def game(level, difficulty):
 
 
 def save_score(players):
-    with open("highscores.json", "r") as READ_f:
-        try:
-            data = json.load(READ_f)
-        except json.decoder.JSONDecodeError:
+    try:
+        with open("highscores.json", "r") as READ_f:
+            try:
+                data = json.load(READ_f)
+            except json.decoder.JSONDecodeError:
+                data = {}
+                data["scores"] = []
+                print("failed to load json")
+    except FileNotFoundError:
+        with open("highscores.json", "w") as f:
             data = {}
-            data["score"] = []
-            print("failed to load json")
+            data["scores"] = []
+            print("creating a json file...")
     with open("highscores.json", "w") as f:
         for player in players:
             print(player.name, player.score)
-            current_score = {player.name: player.score}
+            current_score = {"nombre": player.name, "score": player.score}
             data["scores"].append(current_score)
         json.dump(data, f)
         print("DUMPED")

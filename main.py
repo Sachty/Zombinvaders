@@ -79,16 +79,17 @@ def historial():
     try:
         with open("highscores.json") as f:
             data = json.load(f)
-            data["scores"].reverse()
-    except json.decoder.JSONDecodeError:
+            sorted_data = sorted(data["scores"], key=lambda k: k["score"])
+            sorted_data.reverse()
+    except (json.decoder.JSONDecodeError, FileNotFoundError) as e:
        print("No hay puntajes guardados")
        have_data = False
     while loop:
         screen.blit(background2, (0,0))
         if have_data:
             count = 1
-            for score in data["scores"]:
-                highscore = default_font.render(f"{str(score)[1:-1]}", False,(0, 0 ,0))
+            for score in sorted_data:
+                highscore = default_font.render(f"{score['nombre']}: {score['score']}", False,(0, 0 ,0))
                 screen.blit(highscore, (200, 30 * count))
                 count += 1
                 if count > 10:
