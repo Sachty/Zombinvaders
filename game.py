@@ -24,8 +24,8 @@ def game():
     running = True
 
     # Initialize players
-    hero = entities.Player("player", 230, SCREEN_HEIGHT/3)
-    zero = entities.Player("player2", 230, SCREEN_HEIGHT * 2 / 3)
+    hero = entities.Player("hero", 230, SCREEN_HEIGHT/3)
+    zero = entities.Player("zero", 230, SCREEN_HEIGHT * 2 / 3)
     # agregar player a player.Group y all_sprites.Group
     all_sprites = pg.sprite.Group()
     all_sprites.add(hero)
