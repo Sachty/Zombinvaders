@@ -148,10 +148,6 @@ def game(level, difficulty):
                 
             else:
                 print("Victoria!")
-                for player in players:
-                    with open(f"{player.spr}_score.txt", "w") as f:
-                        f.write(str(player.name, player.score))
-
                 save_score(player_scoring)
         
         if len(players) == 0 or zombie_generator.zombie_passed():
@@ -169,7 +165,7 @@ def save_score(players):
             data = json.load(READ_f)
         except json.decoder.JSONDecodeError:
             data = {}
-            data["scores"] = []
+            data["score"] = []
             print("failed to load json")
     with open("highscores.json", "w") as f:
         for player in players:

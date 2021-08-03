@@ -2,6 +2,7 @@ import pygame
 from images import *
 from game import game
 import sys
+import json
 ancho_pantalla = 512
 alto_pantalla = 480
 screen = pygame.display.set_mode((ancho_pantalla,alto_pantalla))
@@ -10,7 +11,7 @@ cursor = pygame.mouse.get_pos()
 background = fondo
 background2 = fondo2
 pygame.font.init()
-difficulty_text = pygame.font.SysFont(None, 30)
+default_font = pygame.font.SysFont(None, 30)
 
 pygame.mixer.init()
 def fade(ancho,alto):
@@ -41,11 +42,11 @@ def controles():
             if dificultad > 2:
                 dificultad = 0
         if dificultad == 0:
-            textsurface = difficulty_text.render("Difícil", False, (0, 0, 0))
+            textsurface = default_font.render("Difícil", False, (0, 0, 0))
         elif dificultad == 1:
-            textsurface = difficulty_text.render("Normal", False, (0, 0, 0))
+            textsurface = default_font.render("Normal", False, (0, 0, 0))
         else:
-            textsurface = difficulty_text.render("Fácil", False, (0, 0, 0))
+            textsurface = default_font.render("Fácil", False, (0, 0, 0))
         
         screen.blit(textsurface, (228, 362))
 
@@ -71,6 +72,38 @@ def submenu():
             if i.type == pygame.QUIT:
                 quit()
         pygame.display.update()
+
+def historial():
+    loop = True
+    have_data = True
+    try:
+        with open("highscores.json") as f:
+            data = json.load(f)
+            data["scores"].reverse()
+    except json.decoder.JSONDecodeError:
+       print("No hay puntajes guardados")
+       have_data = False
+    while loop:
+        screen.blit(background2, (0,0))
+        if have_data:
+            count = 1
+            for score in data["scores"]:
+                highscore = default_font.render(f"{str(score)[1:-1]}", False,(0, 0 ,0))
+                screen.blit(highscore, (200, 30 * count))
+                count += 1
+                if count > 10:
+                    break
+
+        
+        if flechaiz1.draw():
+            fade(800,500)
+            menu()
+        
+        for i in pygame.event.get():
+            if i.type == pygame.QUIT:
+                quit()
+        pygame.display.update()
+
 
 class Boton():
     def __init__(self,x,y,imagen,imagen2):
@@ -120,7 +153,9 @@ def menu():
         if exit.draw():
             quit()
             print("exit")
-        highscore.draw()
+        if highscore.draw():
+            fade(800, 500)
+            historial()
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 loop = False
