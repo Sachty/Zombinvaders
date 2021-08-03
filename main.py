@@ -9,6 +9,9 @@ cursor = pygame.mouse.get_pos()
 background = fondo
 background2 = fondo2
 
+with open("highscores.json", "w") as f:
+    pass
+
 pygame.mixer.init()
 def fade(ancho,alto):
     fade = pygame.Surface((ancho,alto))
@@ -31,7 +34,7 @@ def controles():
             fade(800,500)
             submenu()
         if flechader1.draw():
-            game(4, 0)
+            game(2, 0)
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 quit()

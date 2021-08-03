@@ -19,7 +19,6 @@ class ZombieGenerator:
         if self.delta < 0:
             self.delta = random.randint(100, 500)
             self.count += 1
-            print(self.count)
             if random.random() < self.frequency and self.count < self.maximum:
                 if random.random() > 0.7 - self.level / 20 * (self.difficulty + 1):
                     choice = random.randint(0, max(self.level, 1))

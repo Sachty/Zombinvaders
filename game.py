@@ -159,14 +159,16 @@ def game(level, difficulty):
 
 
 def save_score(players):
-    with open("highscores.json", "w+") as f:
+    with open("highscores.json", "r") as f:
         try: 
             data = json.load(f)
         except json.decoder.JSONDecodeError:
             data = {"scores": []}
+            print("failed to load json")
+    with open("highscores.json", "w") as f:
         for player in players:
             print(player.name, player.score)
-            current_score = [player.name, player.score]
+            current_score = {player.name: player.score}
             data["scores"].append(current_score)
-        json.dump(data, f, indent = 4)
+        json.dump(data, f)
         print("DUMPED")
