@@ -1,13 +1,15 @@
 import pygame
 from images import *
-from game import *
+from game import game
 ancho_pantalla = 512
 alto_pantalla = 480
 screen = pygame.display.set_mode((ancho_pantalla,alto_pantalla))
-pygame.display.set_caption("BOTONES MARCA BRUH")
+pygame.display.set_caption("Zombinvader")
 cursor = pygame.mouse.get_pos()
 background = fondo
 background2 = fondo2
+
+pygame.mixer.init()
 def fade(ancho,alto):
     fade = pygame.Surface((ancho,alto))
     fade.fill((0,0,0))

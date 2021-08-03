@@ -37,6 +37,9 @@ def game(level, difficulty):
     clock = pg.time.Clock()
     # Iniciar generador de zombies.
     zombie_generator = ZombieGenerator(level - difficulty, level/10 + 0.07 - difficulty/20)
+    end_of_round = pg.USEREVENT + 1
+
+    pg.time.set_timer(end_of_round, 10000)
 
 
     while running:
@@ -52,6 +55,11 @@ def game(level, difficulty):
                 running = False
             elif event.type == pg.VIDEORESIZE:
                 screen = pg.display.set_mode(event.size, pg.RESIZABLE)
+            
+            if event.type == end_of_round:
+                print("next")
+                game(level + 1, difficulty)
+
 
         # Input Handling
         for player in players:
@@ -125,5 +133,3 @@ def game(level, difficulty):
 
         # Actualizar la pantalla
         pg.display.flip()
-
-game(2, 1)
