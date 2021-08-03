@@ -162,7 +162,7 @@ class ZigZagZombie(Zombie):
 
         self.animate
 
-        if self.position.y > 226 or self.position.y < 0:
+        if self.position.y > 226 * 2 or self.position.y < 0:
             self.direction.y *= -1
 
 class FastZigZombie(ZigZagZombie):

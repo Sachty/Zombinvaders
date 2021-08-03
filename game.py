@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 import pygame as pg
 import entities
 from zombie_generator import ZombieGenerator
@@ -147,6 +148,10 @@ def game(level, difficulty):
                 
             else:
                 print("Victoria!")
+                for player in players:
+                    with open(f"{player.spr}_score.txt", "w") as f:
+                        f.write(str(player.name, player.score))
+
                 save_score(player_scoring)
         
         if len(players) == 0 or zombie_generator.zombie_passed():
@@ -159,11 +164,12 @@ def game(level, difficulty):
 
 
 def save_score(players):
-    with open("highscores.json", "r") as f:
-        try: 
-            data = json.load(f)
+    with open("highscores.json", "r") as READ_f:
+        try:
+            data = json.load(READ_f)
         except json.decoder.JSONDecodeError:
-            data = {"scores": []}
+            data = {}
+            data["scores"] = []
             print("failed to load json")
     with open("highscores.json", "w") as f:
         for player in players:

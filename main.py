@@ -12,9 +12,6 @@ background2 = fondo2
 pygame.font.init()
 difficulty_text = pygame.font.SysFont(None, 30)
 
-with open("highscores.json", "w") as f:
-    pass
-
 pygame.mixer.init()
 def fade(ancho,alto):
     fade = pygame.Surface((ancho,alto))
