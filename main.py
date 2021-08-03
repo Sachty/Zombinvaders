@@ -17,7 +17,7 @@ def fade(ancho,alto):
         fade.set_alpha(i)
         screen.blit(fade,(0,0))
         pygame.display.update()
-        pygame.time.delay(4)
+        pygame.time.delay(3)
 def controles():
     trans = True
     while trans:
@@ -31,7 +31,7 @@ def controles():
             fade(800,500)
             submenu()
         if flechader1.draw():
-            game(1, 1)
+            game(4, 0)
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 quit()

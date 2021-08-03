@@ -9,6 +9,7 @@ class Entity(pg.sprite.Sprite):
         self.position = pg.Vector2(x, y)
         self.direction = pg.Vector2(0, 0)
         self.SPEED = 0.2
+        self.spr = spr
         try:
             self.image = pg.image.load(f"assets/{spr}.png").convert_alpha()
             self.rect = self.image.get_rect()
@@ -26,9 +27,13 @@ class Entity(pg.sprite.Sprite):
 
 
 class Player(Entity):
-    def __init__(self, spr, x, y):
+    def __init__(self, spr, x, y, name="deuce"):
         super().__init__(spr, x, y)
-        self.score = 0
+        try:
+            with open(f"{spr}_score.txt") as f:
+                self.score = int(f.readline())
+        except IOError:
+            self.score = 0
         self.bullets = pg.sprite.Group()
         self.delta = 0
         self.sprites = []
@@ -36,6 +41,7 @@ class Player(Entity):
         self.sprites.append(pg.image.load(f"assets/{spr}2.png"))
         self.current_sprite = 0.0
         self.image = self.sprites[int(self.current_sprite)]
+        self.name = name
 
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
@@ -140,12 +146,14 @@ class TankZombie(Zombie):
         super().__init__(spr, x, y)
         self.SPEED = 0.04
         self.health = 4
+        self.value = 250
 
 class ZigZagZombie(Zombie):
     def __init__(self, spr="zigzombie", x=-16, y=16):
         super().__init__(spr, x, y)
         numbers = [1, -1]
         self.direction.y = 0.7 * random.choice(numbers)
+        self.value = 150
 
     def move(self, move_speed):
         self.position.xy += self.direction.xy * move_speed
@@ -161,12 +169,13 @@ class FastZigZombie(ZigZagZombie):
         def __init__(self, spr="fastzigzombie", x=-16, y=16):
             super().__init__(spr, x, y)
             self.SPEED = 0.08
+            self.value = 250
 
 
 class Bullet(Entity):
     def __init__(self, spr, x, y, inertia):
         super().__init__(spr, x, y)
-        self.SPEED = 1.6
+        self.SPEED = 1.2
         self.direction.y = inertia
 
 

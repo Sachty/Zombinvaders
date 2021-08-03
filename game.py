@@ -1,6 +1,8 @@
 import pygame as pg
 import entities
 from zombie_generator import ZombieGenerator
+import json
+import os
 def game(level, difficulty):
     # CONSTANTS
     SCREEN_HEIGHT = 240 * 2
@@ -8,7 +10,7 @@ def game(level, difficulty):
 
     # VARIABLES
     collided = False
-    seperator_hp = 5
+    seperator_hp = 10
     # Barra blanca que separa
     seperator = pg.Rect(420, 0, seperator_hp, SCREEN_HEIGHT)
 
@@ -23,6 +25,11 @@ def game(level, difficulty):
 
     running = True
 
+    if level == 1:
+        if os.path.exists("hero_score.txt"):
+            os.remove("hero_score.txt")
+        if os.path.exists("zero_score.txt"):
+            os.remove("zero_score.txt")
     # Initialize players
     hero = entities.Player("hero", 230, SCREEN_HEIGHT/3)
     zero = entities.Player("zero", 230, SCREEN_HEIGHT * 2 / 3)
@@ -31,15 +38,16 @@ def game(level, difficulty):
     all_sprites.add(hero)
     all_sprites.add(zero)
     players = pg.sprite.Group()
+    player_scoring = []
     players.add(hero)
     players.add(zero)
+    player_scoring.append(hero)
+    player_scoring.append(zero)
 
     clock = pg.time.Clock()
     # Iniciar generador de zombies.
-    zombie_generator = ZombieGenerator(level - difficulty, level/10 + 0.07 - difficulty/20)
+    zombie_generator = ZombieGenerator(level - difficulty, level/20 + 0.1 - difficulty/20, difficulty, 75 - 25 * difficulty)
     end_of_round = pg.USEREVENT + 1
-
-    pg.time.set_timer(end_of_round, 10000)
 
 
     while running:
@@ -55,10 +63,6 @@ def game(level, difficulty):
                 running = False
             elif event.type == pg.VIDEORESIZE:
                 screen = pg.display.set_mode(event.size, pg.RESIZABLE)
-            
-            if event.type == end_of_round:
-                print("next")
-                game(level + 1, difficulty)
 
 
         # Input Handling
@@ -106,7 +110,7 @@ def game(level, difficulty):
 
             if seperator.colliderect(zombie):
                 zombie.kill()
-                seperator_hp -= 1
+                seperator_hp -= 2
             for player in players:  # Colisión balas con zombies
                 gets_hit = pg.sprite.spritecollide(zombie, player.bullets, True)
                 gets_attacked= pg.sprite.spritecollide(zombie, players, True)
@@ -131,5 +135,37 @@ def game(level, difficulty):
         # Transformar fake_screen al tamaño de screen, y hacerle blit.
         screen.blit(pg.transform.scale(fake_screen, screen.get_rect().size), (0, 0))
 
+        if zombie_generator.count > zombie_generator.maximum and len(zombie_generator.zombies) == 0:
+            if level < 5:
+                running = False
+                for player in players:
+                    with open(f"{player.spr}_score.txt", "w") as f:
+                        f.write(str(player.score))
+
+                game(level + 1, difficulty)
+                print("next level")
+                
+            else:
+                print("Victoria!")
+                save_score(player_scoring)
+        
+        if len(players) == 0:
+            save_score(player_scoring)
+            running = False
+
         # Actualizar la pantalla
         pg.display.flip()
+
+
+def save_score(players):
+    with open("highscores.json", "w+") as f:
+        try: 
+            data = json.load(f)
+        except json.decoder.JSONDecodeError:
+            data = {"scores": []}
+        for player in players:
+            print(player.name, player.score)
+            current_score = [player.name, player.score]
+            data["scores"].append(current_score)
+        json.dump(data, f, indent = 4)
+        print("DUMPED")
