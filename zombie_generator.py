@@ -25,6 +25,12 @@ class ZombieGenerator:
                     choice = random.randint(0, max(self.level, 1))
                 else:
                     choice = random.randint(0, 1)
-                new_zombie = self.zombie_data[choice](y=random.randint(0, 228))
+                new_zombie = self.zombie_data[choice](y=random.randint(0, 228* 2))
                 self.zombies.add(new_zombie)
                 all_sprites.add(new_zombie)
+    
+    def zombie_passed(self):
+        for zombie in self.zombies:
+            if zombie.position.x > 520:
+                return True
+        return False

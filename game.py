@@ -149,9 +149,10 @@ def game(level, difficulty):
                 print("Victoria!")
                 save_score(player_scoring)
         
-        if len(players) == 0:
+        if len(players) == 0 or zombie_generator.zombie_passed():
             save_score(player_scoring)
             running = False
+            print()
 
         # Actualizar la pantalla
         pg.display.flip()
