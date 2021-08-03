@@ -5,6 +5,7 @@ from zombie_generator import ZombieGenerator
 import json
 import os
 def game(level, difficulty, player1, player2):
+    default_font = pg.font.Font("pixel_maz.ttf", 40)
     # CONSTANTS
     SCREEN_HEIGHT = 240 * 2
     SCREEN_WIDTH = 256 * 2
@@ -49,6 +50,7 @@ def game(level, difficulty, player1, player2):
     # Iniciar generador de zombies.
     zombie_generator = ZombieGenerator(level - difficulty, level/20 + 0.1 - difficulty/20, difficulty, 75 - 25 * difficulty)
     end_of_round = pg.USEREVENT + 1
+    noche = default_font.render(f"noche {level}",True,(255,255,255))
 
 
     while running:
@@ -58,6 +60,7 @@ def game(level, difficulty, player1, player2):
         delta_speed = float(dt)
 
         fake_screen.fill((0, 0, 0))
+        fake_screen.blit(noche, (228, 10))
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
