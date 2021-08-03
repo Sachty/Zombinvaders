@@ -10,9 +10,12 @@ pygame.display.set_caption("Zombinvader")
 cursor = pygame.mouse.get_pos()
 background = fondo
 background2 = fondo2
+usuario1=""
+usuario2=""
 pygame.font.init()
-default_font = pygame.font.SysFont(None, 30)
-
+default_font = pygame.font.Font("pixel_maz.ttf", 40)
+cuadro_texto1 = pygame.Rect(20,200,190,60)
+cuadro_texto2 = pygame.Rect(300,200,190,60)
 pygame.mixer.init()
 def fade(ancho,alto):
     fade = pygame.Surface((ancho,alto))
@@ -36,17 +39,17 @@ def controles():
             fade(800,500)
             submenu()
         if flechader1.draw():
-            game(1, dificultad)
+            game(1, dificultad, usuario1, usuario2)
         if botondificultad.draw():
             dificultad += 1
             if dificultad > 2:
                 dificultad = 0
         if dificultad == 0:
-            textsurface = default_font.render("Difícil", False, (0, 0, 0))
+            textsurface = default_font.render("Dificil", False, (0, 0, 0))
         elif dificultad == 1:
             textsurface = default_font.render("Normal", False, (0, 0, 0))
         else:
-            textsurface = default_font.render("Fácil", False, (0, 0, 0))
+            textsurface = default_font.render("Facil", False, (0, 0, 0))
         
         screen.blit(textsurface, (228, 362))
 
@@ -56,7 +59,11 @@ def controles():
                 quit()
         pygame.display.update()
 def submenu():
+    texto1 = pygame.font.Font("pixel_maz.ttf", 70)
+    global usuario1, usuario2
     salir = True
+    active = False
+    active2 = False
     while salir:
         screen.blit(background2,[0,0])
         pygame.draw.line(screen,(153,255,153),(256,100),(256,300),10)
@@ -71,6 +78,34 @@ def submenu():
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 quit()
+            if i.type == pygame.MOUSEBUTTONDOWN:
+                if cuadro_texto1.collidepoint(i.pos):
+                    active = True
+                else:
+                    active = False
+            if i.type == pygame.KEYDOWN:
+                if active == True:
+                    if i.key == pygame.K_BACKSPACE:
+                        usuario1 = usuario1[:-1]
+                    else:
+                        usuario1 += i.unicode
+            if i.type == pygame.MOUSEBUTTONDOWN:
+                if cuadro_texto2.collidepoint(i.pos):
+                    active2 = True
+                else:
+                    active2 = False
+            if i.type == pygame.KEYDOWN:
+                if active2 == True:
+                    if i.key == pygame.K_BACKSPACE:
+                        usuario2 = usuario2[:-1]
+                    else:
+                        usuario2 += i.unicode
+        pygame.draw.rect(screen,(153,255,153),cuadro_texto1,2)
+        letra = texto1.render(usuario1,True,(255,255,255))
+        screen.blit(letra,(cuadro_texto1.x +5, cuadro_texto1.y +5))
+        pygame.draw.rect(screen, (153, 255, 153), cuadro_texto2, 2)
+        letra2 = texto1.render(usuario2, True, (255, 255, 255))
+        screen.blit(letra2, (cuadro_texto2.x + 5, cuadro_texto2.y + 5))
         pygame.display.update()
 
 def historial():

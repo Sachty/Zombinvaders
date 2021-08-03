@@ -4,7 +4,7 @@ import entities
 from zombie_generator import ZombieGenerator
 import json
 import os
-def game(level, difficulty):
+def game(level, difficulty, player1, player2):
     # CONSTANTS
     SCREEN_HEIGHT = 240 * 2
     SCREEN_WIDTH = 256 * 2
@@ -32,8 +32,8 @@ def game(level, difficulty):
         if os.path.exists("zero_score.txt"):
             os.remove("zero_score.txt")
     # Initialize players
-    hero = entities.Player("hero", 230, SCREEN_HEIGHT/3)
-    zero = entities.Player("zero", 230, SCREEN_HEIGHT * 2 / 3)
+    hero = entities.Player("hero", 230, SCREEN_HEIGHT/3, name=player1)
+    zero = entities.Player("zero", 230, SCREEN_HEIGHT * 2 / 3, name=player2)
     # agregar player a player.Group y all_sprites.Group
     all_sprites = pg.sprite.Group()
     all_sprites.add(hero)
@@ -143,7 +143,7 @@ def game(level, difficulty):
                     with open(f"{player.spr}_score.txt", "w") as f:
                         f.write(str(player.score))
 
-                game(level + 1, difficulty)
+                game(level + 1, difficulty, player1, player2)
                 print("next level")
                 
             else:
