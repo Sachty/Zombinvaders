@@ -96,6 +96,10 @@ def game():
             zombie.direction.xy = (0, 0)
             zombie.direction.x += 1
             zombie.move(zombie.SPEED * delta_speed)
+
+            if seperator.colliderect(zombie):
+                zombie.kill()
+                seperator_hp -= 1
             for player in players:  # Colisión balas con zombies
                 gets_hit = pg.sprite.spritecollide(zombie, player.bullets, True)
                 gets_attacked= pg.sprite.spritecollide(zombie, players, True)
@@ -111,8 +115,7 @@ def game():
             for bullet in player.bullets:
                 bullet.direction.x = -1
                 bullet.move(bullet.SPEED * delta_speed)
-        # if pg.sprite.spritecollide(seperator, zombie_generator.zombies, True):
-        #     print("Oof")
+        seperator = pg.Rect(210 -seperator_hp, 0, seperator_hp, SCREEN_HEIGHT)
 
         pg.draw.rect(fake_screen, (255, 255, 255), seperator)
         all_sprites.draw(fake_screen)
@@ -123,3 +126,4 @@ def game():
 
         # Actualizar la pantalla
         pg.display.flip()
+game()
